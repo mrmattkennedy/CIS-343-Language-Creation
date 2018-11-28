@@ -1,11 +1,13 @@
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
+	//necessary to import t oaccess setup, parse, and finish functions.
 	#include "zoomjoystrong.h"
-	int yylex();
 	int yyerror(const char* err);
+	int yylex();
 %}
 
+/* Creating tokens to use with grammar*/
 %token INT
 %token RECTANGLE
 %token LINE
@@ -16,13 +18,17 @@
 %token EOL
 %%
 
+/* Creating the grammar to be parsed with bison.
+ Entry point is program, which has an expression list.*/
 program:		expression_list
 	;
 
+/* expression list is either an expr, or an expression list and an expr */
 expression_list:	expr
 	|		expression_list expr
 	;
 
+/* List of what an expression can be using the given tokens above. */
 expr:		LINE  INT  INT  INT  INT EOL
     		{line($2, $3, $4, $5);}
     	|	POINT  INT INT EOL
